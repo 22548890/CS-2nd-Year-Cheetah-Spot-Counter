@@ -1,0 +1,3 @@
+{
+    "java.checkstyle.configuration": "${workspaceFolder}\\22548890-rw214-project\\stylespec.xml"
+}
