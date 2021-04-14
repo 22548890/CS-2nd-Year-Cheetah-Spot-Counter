@@ -32,7 +32,7 @@ public class Animal {
     return sFilename + sMode + ".png";
   }
 
-  public static int mostFreqRGB(int[] arrInt) {
+  public static void mostFreqRGB(int[] arrInt, int x, int y) {
     Arrays.sort(arrInt);
     int n = arrInt.length;
 
@@ -58,29 +58,34 @@ public class Animal {
       temp = arrInt[n - 1];
     }
 
-
-    return temp;
-  }
-
-  public static int[][] arrRGBNR(int[][] arrRGB, int width, int height) {
-    int[] arrInt = new int[5];
-
-    
-    for (int w = 1; w < width - 2; w++) {
-      for (int h = 1; h < height - 2; h++) {
-
-        arrInt[0] = arrRGB[w][h + 1];// top middle
-        arrInt[1] = arrRGB[w + 1][h];// left
-        arrInt[2] = arrRGB[w + 1][h + 1];// middle
-        arrInt[3] = arrRGB[w + 1][h + 2];// right
-        arrInt[4] = arrRGB[w + 2][h + 1];// bottom
-        arrRGB[w + 1][h + 1] = mostFreqRGB(arrInt);
- System.out.println(mostFreqRGB(arrInt));
-      }
+    if (countofmax > 1) {
+      int r = temp;
+      Color c = new Color(r, r, r);
+      picNR.setRGB(x, y, c.getRGB());
     }
 
+  }
 
-    return arrRGB;
+  public static void denoise(int width, int height) {
+    int x = 0;
+    int y = 0;
+    for (x = 1; x < width - 1; x++) {
+      for (y = 1; y < height - 1; y++) {
+
+        int[] arrInt = new int[5];
+        // arrInt[0]= picGS.get(x - 1, y - 1).getRed();
+        arrInt[0] = picGS.get(x - 1, y).getRed();
+        // arrInt[2]= picGS.get(x - 1, y + 1).getRed();
+        arrInt[1] = picGS.get(x, y - 1).getRed();
+        arrInt[2] = picGS.get(x, y).getRed();
+        arrInt[3] = picGS.get(x, y + 1).getRed();
+        // arrInt[6]= picGS.get(x + 1, y - 1).getRed();
+        arrInt[4] = picGS.get(x + 1, y).getRed();
+        // arrInt[8]= picGS.get(x + 1, y + 1).getRed();
+        mostFreqRGB(arrInt, x, y);
+
+      }
+    }
   }
 
   public static void noiseReduction(String args) {
@@ -89,20 +94,9 @@ public class Animal {
 
     int width = picNR.width();
     int height = picNR.height();
-    int[][] arrRGB = new int[width][height];
 
-    // populating array of rgb values
-    for (int w = 1; w < width - 1; w++)
-      for (int h = 1; h < height - 1; h++)
-        arrRGB[w][h] = picGS.getRGB(w, h);
 
-    // reduced array
-    arrRGB = arrRGBNR(arrRGB, width, height);
-
-    for (int w = 1; w < width - 1; w++)
-      for (int h = 1; h < height - 1; h++)
-        picNR.setRGB(w, h, arrRGB[w][h]);
-
+    denoise(width, height);
 
 
     picNR.save("out/" + renameFile(args, "_NR"));
