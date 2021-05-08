@@ -3,11 +3,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * This program greyscales, noise reduces and detects edges from given images.
+ * This program grey-scales, noise reduces and detects edges from given images.
  * 
  * @author 22548890
  * 
- * @version 3.1
+ * @version 4.1
  */
 public class Animal {
   static Picture picGS;
@@ -60,8 +60,11 @@ public class Animal {
    * @param y the y position
    */
   public static void mostFreqRGB(int[] arrInt, int x, int y) {
+    int midRGB = arrInt[2];
+    boolean isMidFreq = false;
     Arrays.sort(arrInt);
     int n = arrInt.length;
+    int[] arrCount = new int[5];
 
     int countofmax = 1;
     int temp = arrInt[0];
@@ -70,21 +73,27 @@ public class Animal {
     for (int i = 1; i < arrInt.length; i++) {
       if (arrInt[i] == arrInt[i - 1]) {
         count++;
+        arrCount[i] = count;
       } else {
         if (count >= countofmax) {
           countofmax = count;
           temp = arrInt[i - 1];
+          if (temp == midRGB && count >= 2)
+            isMidFreq = true;
         }
         count = 1;
+        arrCount[i] = count;
       }
     }
-
 
     if (count >= countofmax) {
       countofmax = count;
       temp = arrInt[n - 1];
     }
 
+    if (isMidFreq && countofmax == 2) {
+      temp = midRGB;
+    }
     if (countofmax > 1) {
       int r = temp;
       Color c = new Color(r, r, r);
@@ -149,9 +158,6 @@ public class Animal {
   public static void edgeDetection(String args, String eps) {
     picED = new Picture(picNR);
     int iEps = Integer.parseInt(eps);
-    Color black = new Color(0, 0, 0);
-    Color white = new Color(255, 255, 255);
-
     int width = picED.width();
     int height = picED.height();
 
@@ -172,15 +178,68 @@ public class Animal {
 
         for (int i = 0; i < arrInt.length; i++) {
           if (Math.abs(picNR.get(x, y).getRed() - arrInt[i]) >= iEps) {
-            picED.set(x, y, white);
+            picED.set(x, y, Color.white);
             break;
           } else
-            picED.set(x, y, black);
+            picED.set(x, y, Color.black);
         }
       }
     }
 
     picED.save("out/" + renameFile(args, "_ED"));// ../out/
+  }
+
+  public static boolean errHandling(String[] args) {
+    String sMode;
+    int iMode;
+    String argsEps;
+    try {
+      int argslen = args.length;
+      sMode = args[0];
+      if (args[0].isBlank() || args[1].isBlank()) {
+        System.err.println("ERROR: invalid number of arguments");
+        return false;
+      }
+
+      if (sMode == "2")
+        argsEps = args[2];
+
+    } catch (Exception e) {
+      System.err.println("ERROR: invalid number of arguments");
+      return false;
+    }
+
+    try {
+      iMode = Integer.parseInt(sMode);
+      if (iMode > 1)
+        Double.parseDouble(args[2]);
+    } catch (Exception e) {
+      System.err.println("ERROR: invalid argument type");
+      return false;
+    }
+
+    if (iMode < 0 || iMode > 3) {
+      System.err.println("ERROR: invalid mode");
+      return false;
+    }
+
+    if (iMode > 1) {
+      double dEps = Double.parseDouble(args[2]);
+      if ((dEps < 0 || dEps > 255) || (dEps - (int) dEps > 0)) {
+        System.err.println("ERROR: invalid epsilon");
+        return false;
+      }
+    }
+    try {
+      Picture pTest = new Picture(args[1]);
+    } catch (Exception e) {
+      System.err.println("ERROR: invalid or missing file");
+      return false;
+    }
+
+
+
+    return true;
   }
 
 
@@ -190,29 +249,30 @@ public class Animal {
    * @param args given arguments from user
    */
   public static void main(String[] args) {
-    switch (args[0]) {
-      case "0":
-        greyScale(args[1]);
-        break;
-      case "1":
-        greyScale(args[1]);
-        noiseReduction(args[1]);
-        break;
-      case "2":
-        greyScale(args[1]);
-        noiseReduction(args[1]);
-        edgeDetection(args[1], args[2]);
-        break;
-      case "3":
-        greyScale(args[1]);
-        noiseReduction(args[1]);
-        edgeDetection(args[1], args[2]);
-        // spot detection
-        break;
+    if (errHandling(args)) {
+      switch (args[0]) {
+        case "0":
+          greyScale(args[1]);
+          break;
+        case "1":
+          greyScale(args[1]);
+          noiseReduction(args[1]);
+          break;
+        case "2":
+          greyScale(args[1]);
+          noiseReduction(args[1]);
+          edgeDetection(args[1], args[2]);
+          break;
+        case "3":
+          greyScale(args[1]);
+          noiseReduction(args[1]);
+          edgeDetection(args[1], args[2]);
+          // spot detection
+          break;
 
-      default:
-        throw new IllegalArgumentException("Unexpected value: " + args[0]);
+        default:
+          throw new IllegalArgumentException("Unexpected value: " + args[0]);
+      }
     }
   }
-
 }
