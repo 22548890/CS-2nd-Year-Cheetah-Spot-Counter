@@ -17,7 +17,7 @@ public class Animal {
   /**
    * Grey-scaling picture from inputed argument. /**
    * 
-   * @param args the filename given from argument
+   * @param args the filename given from argument.
    */
   public static void greyScale(String args) {
     Picture picture = new Picture(args);
@@ -34,7 +34,7 @@ public class Animal {
       }
     }
 
-    picGS.save("out/" + renameFile(args, "_GS")); // ../out/
+    picGS.save("../out/" + renameFile(args, "_GS")); // ../out/
   }
 
   /**
@@ -55,12 +55,11 @@ public class Animal {
    * Identifying the most frequent color pixel.
    * 
    * @param arrInt the neighborhood array of integers of rgb values
-   * 
    * @param x the x position
    * @param y the y position
    */
-  public static void mostFreqRGB(int[] arrInt, int x, int y) {
-    int midRGB = arrInt[2];
+  public static void mostFreqRgb(int[] arrInt, int x, int y) {
+    int midRgb = arrInt[2];
     boolean isMidFreq = false;
     Arrays.sort(arrInt);
     int n = arrInt.length;
@@ -78,8 +77,9 @@ public class Animal {
         if (count >= countofmax) {
           countofmax = count;
           temp = arrInt[i - 1];
-          if (temp == midRGB && count >= 2)
+          if (temp == midRgb && count >= 2) {
             isMidFreq = true;
+          }
         }
         count = 1;
         arrCount[i] = count;
@@ -92,7 +92,7 @@ public class Animal {
     }
 
     if (isMidFreq && countofmax == 2) {
-      temp = midRGB;
+      temp = midRgb;
     }
     if (countofmax > 1) {
       int r = temp;
@@ -106,7 +106,6 @@ public class Animal {
    * The noise reduction function.
    * 
    * @param width the width of picture
-   * 
    * @param height the height of picture.
    */
 
@@ -122,7 +121,7 @@ public class Animal {
         arrInt[3] = picGS.get(x, y + 1).getRed();
         arrInt[4] = picGS.get(x + 1, y).getRed();
 
-        mostFreqRGB(arrInt, x, y);
+        mostFreqRgb(arrInt, x, y);
 
       }
     }
@@ -132,20 +131,13 @@ public class Animal {
    * Finalizing noise reduction method.
    * 
    * @param args the filename argument.
-   * 
    */
   public static void noiseReduction(String args) {
     picNR = new Picture(picGS);
-
-
     int width = picNR.width();
     int height = picNR.height();
-
-
     denoise(width, height);
-
-
-    picNR.save("out/" + renameFile(args, "_NR"));// ../out/
+    picNR.save("../out/" + renameFile(args, "_NR"));
   }
 
   /**
@@ -180,15 +172,22 @@ public class Animal {
           if (Math.abs(picNR.get(x, y).getRed() - arrInt[i]) >= iEps) {
             picED.set(x, y, Color.white);
             break;
-          } else
+          } else {
             picED.set(x, y, Color.black);
+          }
         }
       }
     }
 
-    picED.save("out/" + renameFile(args, "_ED"));// ../out/
+    picED.save("../out/" + renameFile(args, "_ED"));
   }
 
+  /**
+   * Check possible errors and prevent runtime errors.
+   * 
+   * @param args the filename argument.
+   * @return return whether or not all errors passed.
+   */
   public static boolean errHandling(String[] args) {
     String sMode;
     int iMode;
@@ -201,8 +200,9 @@ public class Animal {
         return false;
       }
 
-      if (sMode == "2")
+      if (sMode == "2") {
         argsEps = args[2];
+      }
 
     } catch (Exception e) {
       System.err.println("ERROR: invalid number of arguments");
@@ -211,8 +211,9 @@ public class Animal {
 
     try {
       iMode = Integer.parseInt(sMode);
-      if (iMode > 1)
+      if (iMode > 1) {
         Double.parseDouble(args[2]);
+      }
     } catch (Exception e) {
       System.err.println("ERROR: invalid argument type");
       return false;
@@ -236,9 +237,6 @@ public class Animal {
       System.err.println("ERROR: invalid or missing file");
       return false;
     }
-
-
-
     return true;
   }
 
