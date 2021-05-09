@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -28,7 +27,8 @@ public class Animal {
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
         Color c = new Color(picture.getRGB(i, j));
-        int rgb = (int) ((c.getRed() * 0.299) + (c.getGreen() * 0.587) + (c.getBlue() * 0.114));
+        int rgb = (int) ((c.getRed() * 0.299) + (c.getGreen() * 0.587) 
+            + (c.getBlue() * 0.114));
         Color newColor = new Color(rgb, rgb, rgb);
         picGS.setRGB(i, j, newColor.getRGB());
       }
@@ -153,9 +153,11 @@ public class Animal {
     int width = picED.width();
     int height = picED.height();
 
-    for (int i = 0; i < width; i++)
-      for (int j = 0; j < height; j++)
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
         picED.setRGB(i, j, 0);
+      }
+    }
 
     for (int x = 1; x < width - 1; x++) {
       for (int y = 1; y < height - 1; y++) {
