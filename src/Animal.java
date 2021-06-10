@@ -33,8 +33,8 @@ public class Animal {
     for (int i = 0; i < picWidth; i++) {
       for (int j = 0; j < picHeight; j++) {
         c = new Color(picture.getRGB(i, j));
-        rgb = (int) ((c.getRed() * 0.299) + (c.getGreen() * 0.587) + 
-            (c.getBlue() * 0.114));
+        rgb = (int) ((c.getRed() * 0.299) + (c.getGreen() * 0.587) 
+            + (c.getBlue() * 0.114));
         newColor = new Color(rgb, rgb, rgb);
         picGS.setRGB(i, j, newColor.getRGB());
       }
@@ -243,8 +243,8 @@ public class Animal {
       for (int j = 0; j < 2 * radius + 1; j++) {
         xx[i][j] = i;
         yy[i][j] = j;
-        circle[i][j] = Math.pow((xx[i][j] - radius), 2) + 
-            Math.pow((yy[i][j] - radius), 2);
+        circle[i][j] = Math.pow((xx[i][j] - radius), 2) 
+            + Math.pow((yy[i][j] - radius), 2);
 
         if (circle[i][j] < (Math.pow((radius - delta), 2) + width)
             && (circle[i][j] > (Math.pow((radius - delta), 2) - width))) {
@@ -369,7 +369,7 @@ public class Animal {
         return 2;
       
       default:
-        throw new IllegalArgumentException("Unexpected radius: " );
+        throw new IllegalArgumentException("Unexpected radius: ");
     }
     
   }
