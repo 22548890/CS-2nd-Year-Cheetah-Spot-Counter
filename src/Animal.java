@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * This program grey-scales, noise reduces and detects edges from given images.
@@ -34,7 +33,8 @@ public class Animal {
     for (int i = 0; i < picWidth; i++) {
       for (int j = 0; j < picHeight; j++) {
         c = new Color(picture.getRGB(i, j));
-        rgb = (int) ((c.getRed() * 0.299) + (c.getGreen() * 0.587) + (c.getBlue() * 0.114));
+        rgb = (int) ((c.getRed() * 0.299) + (c.getGreen() * 0.587) + 
+            (c.getBlue() * 0.114));
         newColor = new Color(rgb, rgb, rgb);
         picGS.setRGB(i, j, newColor.getRGB());
       }
@@ -233,7 +233,7 @@ public class Animal {
    * @param delta the delta based on radius.
    * @return returns the mask based on the radius, width and delta
    */
-  public static int[][] create_spot_mask(int radius, int width, int delta) {
+  public static int[][] createSpotMask(int radius, int width, int delta) {
     int[][] xx = new int[2 * radius + 1][2 * radius + 1],
         yy = new int[2 * radius + 1][2 * radius + 1],
         mask = new int[2 * radius + 1][2 * radius + 1];
@@ -243,7 +243,8 @@ public class Animal {
       for (int j = 0; j < 2 * radius + 1; j++) {
         xx[i][j] = i;
         yy[i][j] = j;
-        circle[i][j] = Math.pow((xx[i][j] - radius), 2) + Math.pow((yy[i][j] - radius), 2);
+        circle[i][j] = Math.pow((xx[i][j] - radius), 2) + 
+            Math.pow((yy[i][j] - radius), 2);
 
         if (circle[i][j] < (Math.pow((radius - delta), 2) + width)
             && (circle[i][j] > (Math.pow((radius - delta), 2) - width))) {
@@ -278,57 +279,60 @@ public class Animal {
    * @param radius the radius given.
    * @return returns a boolean.
    */
-  public static boolean is_Spot(int sum, int radius) { // add breaks
+  public static boolean isSpot(int sum, int radius) { // add breaks
     switch (radius) {
-      case 4: {
+      case 4: 
         if (sum < 4800) {
           return true;
         }
         break;
-      }
-      case 5: {
+      
+      case 5: 
         if (sum < 6625) {
           return true;
         }
         break;
-      }
-      case 6: {
+      
+      case 6: 
         if (sum < 11000) {
           return true;
         }
         break;
-      }
-      case 7: {
+      
+      case 7: 
         if (sum < 15000) {
           return true;
         }
         break;
-      }
-      case 8: {
+      
+      case 8: 
         if (sum < 19000) {
           return true;
         }
         break;
-      }
-      case 9: {
+      
+      case 9: 
         if (sum < 23000) {
           return true;
         }
         break;
-      }
-      case 10: {
+      
+      case 10: 
         if (sum < 28000) {
           return true;
         }
         break;
-      }
-      case 11: {
+      
+      case 11: 
         if (sum < 35000) {
           return true;
         }
         break;
-      }
+      
+      default:
+        throw new IllegalArgumentException("Unexpected radius: ");
     }
+    
     return false;
   }
 
@@ -338,34 +342,36 @@ public class Animal {
    * @param radius the radius given.
    * @return returns correct delta value.
    */
-  public static int set_delta(int radius) {
+  public static int setDelta(int radius) {
     switch (radius) {
-      case 4: {
+      case 4: 
         return 0;
-      }
-      case 5: {
+      
+      case 5: 
         return 1;
-      }
-      case 6: {
+      
+      case 6: 
         return 1;
-      }
-      case 7: {
+      
+      case 7: 
         return 1;
-      }
-      case 8: {
+      
+      case 8: 
         return 1;
-      }
-      case 9: {
+      
+      case 9: 
         return 1;
-      }
-      case 10: {
+      
+      case 10: 
         return 2;
-      }
-      case 11: {
+      
+      case 11: 
         return 2;
-      }
+      
+      default:
+        throw new IllegalArgumentException("Unexpected radius: " );
     }
-    return 0;
+    
   }
 
   /**
@@ -374,34 +380,36 @@ public class Animal {
    * @param radius the radius given.
    * @return returns correct width.
    */
-  public static int set_Width(int radius) {
+  public static int setWidth(int radius) {
     switch (radius) {
-      case 4: {
+      case 4: 
         return 6;
-      }
-      case 5: {
+      
+      case 5: 
         return 9;
-      }
-      case 6: {
+      
+      case 6: 
         return 12;
-      }
-      case 7: {
+      
+      case 7: 
         return 15;
-      }
-      case 8: {
+      
+      case 8: 
         return 18;
-      }
-      case 9: {
+      
+      case 9: 
         return 21;
-      }
-      case 10: {
+      
+      case 10: 
         return 24;
-      }
-      case 11: {
+      
+      case 11: 
         return 27;
-      }
+      
+      default:
+        throw new IllegalArgumentException("Unexpected radius: ");
     }
-    return 0;
+    
   }
 
   /**
@@ -409,7 +417,7 @@ public class Animal {
    * 
    * @param arr the array received.
    */
-  public static void set_Sd_image(int[][] arr) {
+  public static void setSdImage(int[][] arr) {
     int value;
     Color spot;
     for (int i = 0; i < picWidth; i++) {
@@ -428,22 +436,23 @@ public class Animal {
    * @param lower the lower limit of radius given.
    * @param upper the upper limit of radius given.
    */
-  public static void spot_detection(String args, int lower, int upper) {
+  public static void spotDetection(String args, int lower, int upper) {
     picSD = new Picture(picED);
     spotCount = 0;
     int radius = lower;
-    int width = set_Width(radius);
-    int delta = set_delta(radius);
+    int width = setWidth(radius);
+    int delta = setDelta(radius);
     int[][] arrSpots = new int[picWidth][picHeight];
     int[][] arrEdges = arrPicED();
 
     while (radius <= upper) {
-      find_spots(create_spot_mask(radius, width, delta), radius, arrSpots, arrEdges);
+      findSpots(createSpotMask(radius, width, delta), radius, 
+          arrSpots, arrEdges);
       radius++;
-      width = set_Width(radius);
-      delta = set_delta(radius);
+      width = setWidth(radius);
+      delta = setDelta(radius);
     }
-    set_Sd_image(arrSpots);
+    setSdImage(arrSpots);
     picSD.save("../out/" + renameFile(args, "_SD"));
     System.out.println(spotCount);
   }
@@ -456,7 +465,8 @@ public class Animal {
    * @param arrSpot the array adding founded spots.
    * @param arrEdges the array containing the pixels of picture.
    */
-  public static void find_spots(int[][] mask, int radius, int[][] arrSpot, int[][] arrEdges) {
+  public static void findSpots(int[][] mask, int radius, int[][] 
+      arrSpot, int[][] arrEdges) {
     int maskLength = mask.length;
     int sum;
     for (int i = 0; i < picWidth - maskLength; i++) {
@@ -470,7 +480,7 @@ public class Animal {
             }
           }
         }
-        if (is_Spot(sum, radius)) {
+        if (isSpot(sum, radius)) {
           for (int z = 0; z < maskLength; z++) {
             for (int h = 0; h < maskLength; h++) {
               arrSpot[z + i][h + j] = arrEdges[z + i][h + j];
@@ -506,7 +516,8 @@ public class Animal {
           greyScale(args[1]);
           noiseReduction(args[1]);
           edgeDetection(args[1], args[2]);
-          spot_detection(args[1], Integer.parseInt(args[3]), Integer.parseInt(args[4]));
+          spotDetection(args[1], Integer.parseInt(args[3]), 
+              Integer.parseInt(args[4]));
           break;
 
         default:
