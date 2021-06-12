@@ -2,13 +2,16 @@ import java.awt.Color;
 import java.util.Arrays;
 
 /**
- * This program grey-scales, noise reduces and detects edges from given images.
+ * This program grey-scales, noise reduces, detects edges
+ and counts spots from given images.
  * 
  * @author 22548890
  * 
- * @version 4.1
+ * @version 5
  */
 public class Animal {
+  static boolean gui = false; //Make true for GUI
+  
   static Picture picGS;
   static Picture picNR;
   static Picture picED;
@@ -330,7 +333,7 @@ public class Animal {
         break;
       
       default:
-        throw new IllegalArgumentException("Unexpected radius: ");
+        return false;
     }
     
     return false;
@@ -369,7 +372,7 @@ public class Animal {
         return 2;
       
       default:
-        throw new IllegalArgumentException("Unexpected radius: ");
+        return 0;
     }
     
   }
@@ -407,7 +410,7 @@ public class Animal {
         return 27;
       
       default:
-        throw new IllegalArgumentException("Unexpected radius: ");
+        return 6;
     }
     
   }
@@ -502,15 +505,24 @@ public class Animal {
       switch (args[0]) {
         case "0":
           greyScale(args[1]);
+          if (gui){
+            picGS.show();
+          }
           break;
         case "1":
           greyScale(args[1]);
           noiseReduction(args[1]);
+          if (gui){
+            picNR.show();
+          }
           break;
         case "2":
           greyScale(args[1]);
           noiseReduction(args[1]);
           edgeDetection(args[1], args[2]);
+          if (gui){
+            picED.show();
+          }
           break;
         case "3":
           greyScale(args[1]);
@@ -518,6 +530,9 @@ public class Animal {
           edgeDetection(args[1], args[2]);
           spotDetection(args[1], Integer.parseInt(args[3]), 
               Integer.parseInt(args[4]));
+          if (gui){
+            picSD.show();
+          }
           break;
 
         default:
