@@ -505,14 +505,14 @@ public class Animal {
       switch (args[0]) {
         case "0":
           greyScale(args[1]);
-          if (gui){
+          if (gui) {
             picGS.show();
           }
           break;
         case "1":
           greyScale(args[1]);
           noiseReduction(args[1]);
-          if (gui){
+          if (gui) {
             picNR.show();
           }
           break;
@@ -520,7 +520,7 @@ public class Animal {
           greyScale(args[1]);
           noiseReduction(args[1]);
           edgeDetection(args[1], args[2]);
-          if (gui){
+          if (gui) {
             picED.show();
           }
           break;
@@ -530,7 +530,7 @@ public class Animal {
           edgeDetection(args[1], args[2]);
           spotDetection(args[1], Integer.parseInt(args[3]), 
               Integer.parseInt(args[4]));
-          if (gui){
+          if (gui) {
             picSD.show();
           }
           break;
