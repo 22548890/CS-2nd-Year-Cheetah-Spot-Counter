@@ -1,5 +1,8 @@
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
+import javax.imageio.ImageIO;
 
 /**
  * This program grey-scales, noise reduces, detects edges
@@ -182,51 +185,98 @@ public class Animal {
    * @return return whether or not all errors passed.
    */
   public static boolean errHandling(String[] args) {
-    String sMode;
     int iMode;
-    String argsEps;
+    int eps = 0;
+    int lower = 0;
+    int upper = 0;
+    
     try {
-      int argslen = args.length;
-      sMode = args[0];
-      if (args[0].isBlank() || args[1].isBlank()) {
-        System.err.println("ERROR: invalid number of arguments");
-        return false;
-      }
-      if (sMode == "2") {
-        argsEps = args[2];
-      }
+    if ((args.length < 2) || (args.length>5)) {
+      System.err.println("ERROR: invalid number of arguments");
+      return false;
+    }
+    
+    if ((args[0].equals("2")) && (args.length != 3)) {
+      System.err.println("ERROR: invalid number of arguments");
+      return false;
+    }
+    
+    if ((args[0].equals("2") || args[0].equals("3")) && args[2].isEmpty()) {
+      System.err.println("ERROR: invalid number of arguments");
+      return false;
+    }
+    
+    if (args[0].equals("3") && (args[3].isEmpty() || args[4].isEmpty())) {
+      System.err.println("ERROR: invalid number of arguments");
+      return false;
+    }
+    
     } catch (Exception e) {
       System.err.println("ERROR: invalid number of arguments");
       return false;
     }
+    
     try {
-      iMode = Integer.parseInt(sMode);
-      if (iMode > 1) {
-        Double.parseDouble(args[2]);
+      iMode = Integer.parseInt(args[0]);
+      if(args[0].equals("2") || args[0].equals("3")) {
+        eps = Integer.parseInt(args[2]);
       }
+      
+      if (iMode != (int)iMode) {
+        System.err.println("ERROR: invalid argument type");
+        return false;
+      }
+      
+      if (args[0].equals("3")) {
+        lower = Integer.parseInt(args[3]);
+        upper = Integer.parseInt(args[4]);
+      }
+      
+      if (eps != (int)eps) {
+        System.err.println("ERROR: invalid argument type");
+        return false;
+      }
+      
+      if(Integer.parseInt(args[0]) == 3 && (args[3] == null 
+          || args[4] == null) && lower != (int)lower && upper != (int)upper ) {
+        System.err.println("ERROR: invalid argument type");
+        return false;
+      }
+      
     } catch (Exception e) {
       System.err.println("ERROR: invalid argument type");
       return false;
     }
-    if (iMode < 0 || iMode > 3) {
+    
+    if (!(iMode >= 0 && iMode < 4)) {
       System.err.println("ERROR: invalid mode");
       return false;
     }
-    if (iMode > 1) {
-      double dEps = Double.parseDouble(args[2]);
-      if ((dEps < 0 || dEps > 255) || (dEps - (int) dEps > 0)) {
+    if ((iMode == 2) && ((eps < 0) || (eps >255))) {
         System.err.println("ERROR: invalid epsilon");
         return false;
       }
-    }
-    try {
-      Picture pTest = new Picture(args[1]);
-    } catch (Exception e) {
+    
+     File sFile = new File(args[1]);
+     
+     try {
+       if (!(sFile.exists()) || !(sFile.isFile())) {
+         System.err.println("ERROR: invalid or missing file");
+         return false;
+       } 
+       
+      if(ImageIO.read(sFile) == null) {
+        System.err.println("ERROR: invalid or missing file");
+        return false;
+       }
+    } catch (IOException e) {
       System.err.println("ERROR: invalid or missing file");
       return false;
-    }
+    }   
+  
     return true;
   }
+  
 
   /**
    * Creates the mask
