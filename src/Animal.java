@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
  * 
  * @author 22548890
  * 
- * @version 6
+ * @version 6.1
  */
 public class Animal {
   static boolean gui = false; //Make true for GUI
@@ -191,7 +191,7 @@ public class Animal {
     int upper = 0;
     
     try {
-    if ((args.length < 2) || (args.length>5)) {
+    if ((args.length < 2) || (args.length > 5)) {
       System.err.println("ERROR: invalid number of arguments");
       return false;
     }
@@ -218,11 +218,11 @@ public class Animal {
     
     try {
       iMode = Integer.parseInt(args[0]);
-      if(args[0].equals("2") || args[0].equals("3")) {
+      if (args[0].equals("2") || args[0].equals("3")) {
         eps = Integer.parseInt(args[2]);
       }
       
-      if (iMode != (int)iMode) {
+      if (iMode != (int) iMode) {
         System.err.println("ERROR: invalid argument type");
         return false;
       }
@@ -232,13 +232,13 @@ public class Animal {
         upper = Integer.parseInt(args[4]);
       }
       
-      if (eps != (int)eps) {
+      if (eps != (int) eps) {
         System.err.println("ERROR: invalid argument type");
         return false;
       }
       
-      if(Integer.parseInt(args[0]) == 3 && (args[3] == null 
-          || args[4] == null) && lower != (int)lower && upper != (int)upper ) {
+      if (Integer.parseInt(args[0]) == 3 && (args[3] == null 
+          || args[4] == null) && lower != (int) lower && upper != (int) upper) {
         System.err.println("ERROR: invalid argument type");
         return false;
       }
@@ -252,7 +252,7 @@ public class Animal {
       System.err.println("ERROR: invalid mode");
       return false;
     }
-    if ((iMode == 2) && ((eps < 0) || (eps >255))) {
+    if ((iMode == 2) && ((eps < 0) || (eps > 255))) {
         System.err.println("ERROR: invalid epsilon");
         return false;
       }
@@ -265,7 +265,7 @@ public class Animal {
          return false;
        } 
        
-      if(ImageIO.read(sFile) == null) {
+      if (ImageIO.read(sFile) == null) {
         System.err.println("ERROR: invalid or missing file");
         return false;
        }
