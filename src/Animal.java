@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
  * 
  * @author 22548890
  * 
- * @version 5
+ * @version 6
  */
 public class Animal {
   static boolean gui = false; //Make true for GUI
